@@ -41,6 +41,9 @@ public:
 	// Override GetMovementComponent() to return the custom Pawn Movement
 	// Component.
 
+	// Steering method
+	void Steer(int angle);
+
 	// Handle input the Pawn will receive.
 	void Accelerate();
 	void Brake();
@@ -48,12 +51,15 @@ public:
 	void SteerRight();
 
 private:
-	// FVectors controlling the Pawn's movement
+	// Variables controlling Pawn movement
 	FVector position;
 	FVector velocity;
 	FVector acceleration;
+	float speed;
 	
 	// Keep track of whether player is moving. Cap velocity regardless of number
 	// of up key presses.
 	bool moving;
 };
+
+// FIXME: Forward acceleration is ignored for now. Accel only used for turning.

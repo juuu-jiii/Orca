@@ -73,11 +73,28 @@ void AP1::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("SteerRight", IE_Pressed, this, &AP1::SteerRight);
 }
 
+void AP1::Steer(int angle)
+{
+	// Keep track of speed so that it can be maintained after a turn has been made.
+	speed = velocity.Size();
+
+	// Steer the vehicle.
+	FRotator rotation = GetActorRotation();
+	// Negative rotation = left direction, and vice versa
+	rotation.Yaw += angle;
+	SetActorRotation(rotation);
+
+	// Update the velocity with respect to the vehicle's forward vector.
+	velocity = speed * GetActorForwardVector();
+}
+
 void AP1::Accelerate()
 {
 	if (!moving)
 	{
-		velocity.X = 500.0f; // Speed: 500 Unreal Units
+		speed = 500; // Speed: 500 Unreal Units
+		velocity = speed * GetActorForwardVector();
+		//velocity.X = 500.0f; 
 		moving = !moving;
 	}
 		//SetActorLocation(GetActorLocation() + Velocity * DeltaTime);
@@ -87,7 +104,9 @@ void AP1::Brake()
 {
 	if (moving)
 	{
-		velocity.X = 0.0f;
+		speed = 0;
+		velocity = speed * GetActorForwardVector();
+		//velocity.X = 0.0f;
 		moving = !moving;
 	}
 }
@@ -97,9 +116,7 @@ void AP1::SteerLeft()
 	// You need to alter the object's velocity as well. You can't just rotate like
 	// that LOL
 
-	FRotator rotation = GetActorRotation();
-	rotation.Yaw -= 90; // Negative rotation = left direction
-	SetActorRotation(rotation);
+	Steer(-90);
 
 	// TODO: change velocity as well as rotation.
 	// TODO: include an acceleration vector. Change accel to change vel to change pos
@@ -108,8 +125,6 @@ void AP1::SteerLeft()
 
 void AP1::SteerRight()
 {
-	FRotator rotation = GetActorRotation();
-	rotation.Yaw += 90; // Positive rotation = right direction
-	SetActorRotation(rotation);
+	Steer(90);
 }
 
