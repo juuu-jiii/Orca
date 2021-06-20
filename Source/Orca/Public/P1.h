@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/SpringArmComponent.h"
+
+// This must be the last included .h file.
 #include "P1.generated.h"
 
 UCLASS()
@@ -36,10 +39,46 @@ public:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* camera;
 
-	// Reference to custom Pawn Movement Component
+	// Camera Spring Arm Component
+	UPROPERTY(EditAnywhere)
+		USpringArmComponent* springArm;
+
+	//void UpdateCollision();
+	// Custom Pawn Movement Component
+	/*UPROPERTY()
+		class UP1MovementComponent* movementComponent;*/
+
+	// Method overridden to return custom Pawn Movement Component.
+	//virtual UPawnMovementComponent* GetMovementComponent() const override;
 
 	// Override GetMovementComponent() to return the custom Pawn Movement
 	// Component.
+
+	/*UFUNCTION()
+		void ReceiveHit(UPrimitiveComponent* MyComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);*/
+
+	// Collision detection callback method
+	UFUNCTION()
+		void HandleCollision(
+			UPrimitiveComponent* OverlappedComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult
+		);
+
+	//UFUNCTION()
+	//	void HandleHit(
+	//		class UPrimitiveComponent* MyComp,
+	//		AActor* Other,
+	//		class UPrimitiveComponent* OtherComp,
+	//		bool bSelfMoved,
+	//		FVector HitLocation,
+	//		FVector HitNormal,
+	//		FVector NormalImpulse,
+	//		const FHitResult& Hit
+	//	);
 
 	// Steering method
 	void Steer(int angle);
@@ -61,5 +100,3 @@ private:
 	// of up key presses.
 	bool moving;
 };
-
-// FIXME: Forward acceleration is ignored for now. Accel only used for turning.

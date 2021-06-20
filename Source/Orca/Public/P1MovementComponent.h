@@ -14,4 +14,6 @@ class ORCA_API UP1MovementComponent : public UPawnMovementComponent
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };
